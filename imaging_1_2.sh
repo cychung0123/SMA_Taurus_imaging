@@ -2,14 +2,14 @@ config="com"
 flagval="f"
 
 targets='FM_Tau  CW_Tau  04113+2758  CY_Tau  DD_Tau  V892_Tau  BP_Tau  CoKu_Tau_1  RY_Tau  DE_Tau  IP_Tau  FT_Tau  FV_Tau  DH_Tau  IQ_Tau  DK_Tau  UZ_Tau  DL_Tau  GK_Tau  AA_Tau  LkCa_15  CI_Tau  04278+2253  T_Tau  UX_Tau  V710_Tau  DM_Tau  DQ_Tau  Haro_6-37  DR_Tau  FY_Tau  HO_Tau  DN_Tau  DO_Tau  HV_Tau  IC_2087_IR  CIDA-7  GO_Tau  DS_Tau  UY_Aur  Haro_6-39  GM_Aur  AB_Aur  SU_Aur  RW_Aur  CIDA-9  V836_Tau'
-tracks='track2'
+tracks='track1 track2'
 sidebands='lsb usb'
 rxs='rx230 rx240'
 
-# rm -rf *.txt
-# rm -rf *.rx*
-# rm -rf ch0
-# mkdir ch0
+#rm -rf *.txt
+#rm -rf *.rx*
+#rm -rf ch0
+#mkdir ch0
 
 for track in $tracks
 do
@@ -29,11 +29,11 @@ do
 		imsize=256
 	fi
 	if [ $track = 'track2' ]
-        then
-                cellsize=0.25
-                imsize=256
-        fi
-
+	then
+		cellsize=0.25
+		imsize=256
+	fi
+	
 	for target in $targets
 	do
 	  
@@ -57,6 +57,11 @@ do
 	  rm -rf $target'.'$track'.'$rx'.'$sideband'.model.fits'
 	  clean map=$target'.'$track'.'$rx'.'$sideband'.dirty' beam=$target'.'$track'.'$rx'.'$sideband'.beam' out=$target'.'$track'.'$rx'.'$sideband'.model' cutoff=0.001 niters=10
 	  fits in=$target'.'$track'.'$rx'.'$sideband'.model' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.model.fits'
+
+	  rm -rf $target'.'$track'.'$rx'.'$sideband'.clean'
+          rm -rf $target'.'$track'.'$rx'.'$sideband'.clean.fits'
+          restor map=$target'.'$track'.'$rx'.'$sideband'.dirty' beam=$target'.'$track'.'$rx'.'$sideband'.beam' model=$target'.'$track'.'$rx'.'$sideband'.model' mode=clean out=$target'.'$track'.'$rx'.'$sideband'.clean'
+          fits in=$target'.'$track'.'$rx'.'$sideband'.clean' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.clean.fits'
 
 	  rm -rf $target'.'$track'.'$rx'.'$sideband'.residual'
           rm -rf $target'.'$track'.'$rx'.'$sideband'.residual.fits'

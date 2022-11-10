@@ -6,10 +6,10 @@ tracks='track3'
 sidebands='lsb usb'
 rxs='rx240 rx345'
 
-# rm -rf *.txt
-# rm -rf *.rx*
-# rm -rf ch0
-# mkdir ch0
+#rm -rf *.txt
+#rm -rf *.rx*
+#rm -rf ch0
+#mkdir ch0
 
 for track in $tracks
 do
@@ -52,6 +52,11 @@ do
 	  rm -rf $target'.'$track'.'$rx'.'$sideband'.model.fits'
 	  clean map=$target'.'$track'.'$rx'.'$sideband'.dirty' beam=$target'.'$track'.'$rx'.'$sideband'.beam' out=$target'.'$track'.'$rx'.'$sideband'.model' cutoff=0.001 niters=10
 	  fits in=$target'.'$track'.'$rx'.'$sideband'.model' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.model.fits'
+
+	  rm -rf $target'.'$track'.'$rx'.'$sideband'.clean'
+          rm -rf $target'.'$track'.'$rx'.'$sideband'.clean.fits'
+          restor map=$target'.'$track'.'$rx'.'$sideband'.dirty' beam=$target'.'$track'.'$rx'.'$sideband'.beam' model=$target'.'$track'.'$rx'.'$sideband'.model' mode=clean out=$target'.'$track'.'$rx'.'$sideband'.clean'
+          fits in=$target'.'$track'.'$rx'.'$sideband'.clean' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.clean.fits'
 
 	  rm -rf $target'.'$track'.'$rx'.'$sideband'.residual'
           rm -rf $target'.'$track'.'$rx'.'$sideband'.residual.fits'

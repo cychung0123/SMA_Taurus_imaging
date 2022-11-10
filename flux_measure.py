@@ -89,27 +89,31 @@ def gaussian_fitting(z, rms):
             pix_num = (math.pi*(bmaj/2)*(bmin/2)/(np.log(2))/((abs(cdelt1))*cdelt2))
             total_flux = abs(integrated_flux/pix_num)
             SNR=(popt[0]/rms)
-            return max_flux*1000, major_axis, minor_axis, total_flux, SNR
+            return max_flux*1000, major_axis, minor_axis, total_flux, cen, SNR
 
             perr = np.sqrt(np.diag(pcov))
             if perr[3] > 0.22 or perr[4] > 0.22:
                 major_axis = 0.000000000000
                 minor_axis = 0.000000000000
                 total_flux = max_flux*1000
+                cen = max_pos
                 SNR=max_flux/rms
-                return max_flux*1000, major_axis, minor_axis, total_flux, SNR
+                return max_flux*1000, major_axis, minor_axis, total_flux, cen, SNR
         except:
             major_axis = 0.000000000000
             minor_axis = 0.000000000000
             total_flux = max_flux*1000
             SNR=max_flux/rms
-            return max_flux*1000, major_axis, minor_axis, total_flux, SNR
+            cen = max_pos
+            return max_flux*1000, major_axis, minor_axis, total_flux, cen, SNR
     else:
         major_axis = 0.000000000000
         minor_axis = 0.000000000000
         total_flux = max_flux*1000
         SNR=max_flux/rms
-        return max_flux*1000, major_axis, minor_axis, total_flux, SNR
+        cen = max_pos
+        return max_flux*1000, major_axis, minor_axis, total_flux, cen, SNR
+
 
 
 cleanmap = field+'.'+track+'.'+ifband+'.'+sideband+'.clean.fits'
@@ -122,7 +126,6 @@ try:
     # editing the FITS image by multiplying a scaling factor
     clean_img = chdu[0].data[0][0]
     box = eval(sys.argv[5])
-    box=(int(box[0]),int(box[1]),int(box[2]),int(box[3]))
     rms = float(sys.argv[6])
     if_success = True
 
@@ -154,9 +157,16 @@ if ( if_success == True ):
         print('Warnning. No header for synthesized beam size')
 
     # select region to fit
-    z = clean_img[box[0]:box[2] , box[1]:box[3]]
-    peak_flux, major_axis, minor_axis, total_flux, SNR = gaussian_fitting(z, rms)
+    box_cen = ((box[0]+box[2])/2,(box[1]+box[3])/2)
+    box0 = int(box_cen[0] - 5/(cdelt2*3600))
+    box1 = int(box_cen[1] - 5/(cdelt2*3600))
+    box2 = int(box_cen[0] + 5/(cdelt2*3600))
+    box3 = int(box_cen[1] + 5/(cdelt2*3600))
+
+    z = clean_img[box0:box2 , box1:box3]
+    peak_flux, major_axis, minor_axis, total_flux, cen, SNR = gaussian_fitting(z, rms)
     sys.stdout.write(str(peak_flux)+'   '+str(major_axis)+'   '+str(minor_axis)+'   '+str(total_flux)+'   ')
+    box=(box0,box1,box2,box3)
     
 else: 
     box=(0.0, 0.0, 0.0, 0.0)
@@ -165,6 +175,7 @@ else:
     minor_axis = 0.000000000000
     total_flux = 0.000000000000
     SNR=0.0
+    cen=(0.0,0.0)
     sys.stdout.write(str(peak_flux)+'   '+str(major_axis)+'   '+str(minor_axis)+'   '+str(total_flux)+'   ')
 
 
@@ -172,3 +183,4 @@ write_to_file('axis_FWHM_'+track+'.txt', field, str(major_axis)+' '+str(minor_ax
 write_to_file('flux_'+track+'.txt', field, total_flux)
 write_to_file('SNR_'+track+'.txt', field, SNR)
 write_to_file('box_'+track+'.txt', field, box)
+write_to_file('center_'+track+'.txt', field, '('+str(cen[0])+','+str(cen[1])+')')
