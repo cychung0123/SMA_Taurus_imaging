@@ -47,9 +47,11 @@ def write_to_file(file, field, value):
         with open(txt_file, 'w') as f:
             f.write(''.join(field+'   '+add_line))
 
-dirtymap = field+'.'+ifband+'.'+sideband+'.sel.dirty.fits'
-modelmap = field+'.'+ifband+'.'+sideband+'.sel.model.fits'
-residualmap = field+'.'+ifband+'.'+sideband+'.sel.residual.fits'
+modelmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.10.model.fits'
+residualmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.residual.fits'
+dirtymap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.dirty.fits'
+cleanmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.clean.fits'
+
 if_success = False
 try:
 
@@ -57,6 +59,7 @@ try:
     rhdu   = fits.open(residualmap)
     mhdu   = fits.open(modelmap)
     dhdu   = fits.open(dirtymap)
+    chdu   = fits.open(cleanmap)
 
     # editing the FITS image by multiplying a scaling factor
     residual_img = rhdu[0].data[0][0]
@@ -81,35 +84,48 @@ if ( if_success == True ):
     except:
         print( 'Warning. No coordinate headers' )
 
+    try:
+        bmaj = chdu[0].header['bmaj']
+        bmin = chdu[0].header['bmin']
+        bpa  = chdu[0].header['bpa']
+    except:
+        print('Warnning. No header for synthesized beam size')
+
     mdl_s = list(zip(*np.where(model_img > 0)))
     # mdl_s = [(128,128)]
     rms_img = residual_img.copy()
 
     for cen in mdl_s:
-        radius = 2.5/(cdelt2*3600)
+        radius = bmaj*2/(cdelt2)
         y,x = np.ogrid[:naxis1, :naxis2]
         dist = np.sqrt((x-cen[0])**2 + (y-cen[1])**2)
         mask = dist <= radius
         rms_img[mask] = 0
-
+    
+    fig = plt.figure()
+    plt.imshow(rms_img)
 
     rms = math.sqrt(rms_img.std()**2 + rms_img.mean()**2)
     sys.stdout.write(str(rms)+'   ')
-    
 
 else:
     rms = 0.0000000000000
     sys.stdout.write(str(rms)+'   ')
 
+write_to_file('rms_'+track+'.sel.txt', field, rms)
 
-write_to_file('rms.sel.txt', field, rms)
+r_blx = int(naxis1/2-radius*2)
+r_bly = int(naxis2/2-radius*2)
+r_trx = int(naxis1/2+radius*2)
+r_try = int(naxis2/2+radius*2)
 
+dirty_img = dirty_img[r_blx:r_trx,r_bly:r_try]
 peak_value = np.amax(dirty_img)
 peak_pos = np.where(dirty_img == peak_value)
-box_blx = peak_pos[0][0]+5/((cdelt1*3600))+3
-box_bly = peak_pos[1][0]-5/(cdelt2*3600)-1
-box_trx = peak_pos[0][0]-5/((cdelt1*3600))+3
-box_try = peak_pos[1][0]+5/(cdelt2*3600)-1
+box_trx = r_blx + peak_pos[0][0]+(radius*2)
+box_try = r_bly + peak_pos[1][0]+(radius*2)
+box_blx = r_blx + peak_pos[0][0]-(radius*2)
+box_bly = r_bly + peak_pos[1][0]-(radius*2)
 
 sys.stdout.write(str(box_blx)+'   '+str(box_bly)+'   '+str(box_trx)+'   '+str(box_try))
 
