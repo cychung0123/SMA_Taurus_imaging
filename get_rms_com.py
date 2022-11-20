@@ -47,10 +47,10 @@ def write_to_file(file, field, value):
         with open(txt_file, 'w') as f:
             f.write(''.join(field+'   '+add_line))
 
-modelmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.10.model.fits'
-residualmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.residual.fits'
-dirtymap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.dirty.fits'
-cleanmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.clean.fits'
+modelmap = field+'.'+track+'.'+ifband+'.'+sideband+'.model.fits'
+residualmap = field+'.'+track+'.'+ifband+'.'+sideband+'.residual.fits'
+dirtymap = field+'.'+track+'.'+ifband+'.'+sideband+'.dirty.fits'
+cleanmap = field+'.'+track+'.'+ifband+'.'+sideband+'.clean.fits'
 
 if_success = False
 try:
@@ -81,9 +81,6 @@ if ( if_success == True ):
         crval2 = rhdu[0].header['crval2']
         crpix2 = rhdu[0].header['crpix2']
         cdelt2 = rhdu[0].header['cdelt2']
-        hduwcs = wcs.WCS( rhdu[0].header)
-        hduwcs = hduwcs.dropaxis(dropax=2)
-        hduwcs = hduwcs.dropaxis(dropax=2)
     except:
         print( 'Warning. No coordinate headers' )
 
@@ -115,41 +112,20 @@ else:
     rms = 0.0000000000000
     sys.stdout.write(str(rms)+'   ')
 
-write_to_file('rms_'+track+'.sel.txt', field, rms)
+write_to_file('rms_'+track+'.txt', field, rms)
 
-filename='center_track456.txt'
-file = open(filename, 'r')
-lines = file.readlines()
-for i, line in enumerate(lines):
-    if line.split()[0] == field:
-        for k in range(4):
-            if line.split()[k+1] != '(0.0,0.0)':
-                cen_cord = eval(line.split()[k+1])
-                cen_x = hduwcs.wcs_world2pix(cen_cord[0],cen_cord[1],0)[0]
-                cen_y = hduwcs.wcs_world2pix(cen_cord[0],cen_cord[1],0)[1]
-                break
-            else:
-                cen_x = naxis1/2
-                cen_y = naxis2/2
+r_blx = int(naxis1/2-radius*2)
+r_bly = int(naxis2/2-radius*2)
+r_trx = int(naxis1/2+radius*2)
+r_try = int(naxis2/2+radius*2)
 
-box_trx = cen_x+(radius*2)
-box_try = cen_y+(radius*2)
-box_blx = cen_x-(radius*2)
-box_bly = cen_y-(radius*2)
-
-# before obtaining track456
-#r_blx = int(naxis1/2-radius*2)
-#r_bly = int(naxis2/2-radius*2)
-#r_trx = int(naxis1/2+radius*2)
-#r_try = int(naxis2/2+radius*2)
-
-#dirty_img = dirty_img[r_blx:r_trx,r_bly:r_try]
-#peak_value = np.amax(dirty_img)
-#peak_pos = np.where(dirty_img == peak_value)
-#box_trx = r_blx + peak_pos[0][0]+(radius*2)
-#box_try = r_bly + peak_pos[1][0]+(radius*2)
-#box_blx = r_blx + peak_pos[0][0]-(radius*2)
-#box_bly = r_bly + peak_pos[1][0]-(radius*2)
+dirty_img = dirty_img[r_blx:r_trx,r_bly:r_try]
+peak_value = np.amax(dirty_img)
+peak_pos = np.where(dirty_img == peak_value)
+box_trx = r_blx + peak_pos[0][0]+(radius*2)
+box_try = r_bly + peak_pos[1][0]+(radius*2)
+box_blx = r_blx + peak_pos[0][0]-(radius*2)
+box_bly = r_bly + peak_pos[1][0]-(radius*2)
 
 sys.stdout.write(str(box_blx)+'   '+str(box_bly)+'   '+str(box_trx)+'   '+str(box_try))
 
