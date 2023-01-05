@@ -47,7 +47,7 @@ def write_to_file(file, field, value):
         with open(txt_file, 'w') as f:
             f.write(''.join(field+'   '+add_line))
 
-modelmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.10.model.fits'
+modelmap = field+'.'+track+'.'+ifband+'.'+sideband+'.10.sel.model.fits'
 residualmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.residual.fits'
 dirtymap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.dirty.fits'
 cleanmap = field+'.'+track+'.'+ifband+'.'+sideband+'.sel.clean.fits'

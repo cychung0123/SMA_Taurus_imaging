@@ -201,10 +201,10 @@ if ( if_success == True ):
                     cen_x = naxis1/2
                     cen_y = naxis2/2
 
-    box0 = int(cen_x - 5/(cdelt2*3600))
-    box1 = int(cen_y - 5/(cdelt2*3600))
-    box2 = int(cen_x + 5/(cdelt2*3600))
-    box3 = int(cen_y + 5/(cdelt2*3600))
+    box0 = int(cen_x - 7.5/(cdelt2*3600))
+    box1 = int(cen_y - 7.5/(cdelt2*3600))
+    box2 = int(cen_x + 7.5/(cdelt2*3600))
+    box3 = int(cen_y + 7.5/(cdelt2*3600))
 
 
     # select region to fit

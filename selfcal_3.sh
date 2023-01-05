@@ -1,20 +1,20 @@
 targets='CW_Tau  04113+2758  CY_Tau  V892_Tau  BP_Tau  RY_Tau  FT_Tau  IQ_Tau  UZ_Tau  DL_Tau  AA_Tau  LkCa_15  CI_Tau  T_Tau  UX_Tau  V710_Tau  DM_Tau  DQ_Tau  Haro_6-37  DR_Tau  DN_Tau  DO_Tau  IC_2087_IR  GO_Tau  GM_Aur  AB_Aur'
-tracks='track4 track5 track6'
-rxs='rx345 rx400'
+tracks='track3'
+rxs='rx240 rx345'
 sidebands='lsb usb'
 
 refant='6'
 
 # creating a directory to host self-calibrated data
-rm -rf selcal_Miriad
-mkdir selcal_Miriad
+#rm -rf selcal_Miriad
+#mkdir selcal_Miriad
 
-rm -rf *.model
-rm -rf *.txt
-rm -rf *.sel
-rm -rf *.gain
-rm -rf *rx*
-cp ../../imaging_com/center_track456.txt .
+#rm -rf *.model
+#rm -rf *.txt
+#rm -rf *.sel
+#rm -rf *.gain
+#rm -rf *rx*
+#cp ../../imaging_com/center_track456.txt .
 
 # looping over observations on varios target sources
 for track in $tracks
@@ -23,7 +23,7 @@ do
   do
 
     # set reference antenna and solution interval
-    if [ $track = 'track4' ]
+    if [ $track = 'track3' ]
     then
       interval='5'
       refant='6'
@@ -31,7 +31,7 @@ do
       imsize=256
     fi
 
-    if [ $track = 'track5' ]
+    if [ $track = 'track2' ]
     then
       interval='5'
       refant='6'
@@ -60,16 +60,16 @@ do
         cp -r $datadir$vis ./
 	uvflag vis=$vis edge=64,64,0 flagval="f"
 
-	if [ $rx = 'rx345' ] && [ $sideband = 'lsb' ]
-	then
-		# copy over image model
-		model=$target'.'$track'.rx345.lsb.10.model'
-		cp -r $imdir$model ./
+#	if [ $rx = 'rx345' ] && [ $sideband = 'lsb' ]
+#	then
+#		# copy over image model
+	model=$target'.'$track'.'$rx'.'$sideband'.10.model'
+	cp -r $imdir$model ./
 
-	else
-		model=$target'.'$track'.rx345.lsb.10.sel.model'
+#	else
+#		model=$target'.'$track'.rx345.lsb.10.sel.model'
 
-	fi
+#	fi
 
         # copy over image model
 #        model=$target'.rx345.usb.model'
