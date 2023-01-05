@@ -16,7 +16,8 @@ cd ch0/
 rm -rf $tracks
 mkdir $tracks
 cd ../
-  
+cp ../imaging_com/center_track456.txt .
+
 for rx in $rxs
 do
       for sideband in $sidebands
@@ -30,8 +31,13 @@ do
 		cp -r $datadir$vis ./
 		uvflag vis=$target'_'$track'.'$rx'.'$sideband'.cal.miriad' edge=64,64,0 flagval=$flagval
 	  done
-
-	  vis=$target'_track4.'$rx'.'$sideband'.cal.miriad,'$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad'
+	  
+	  if [ $target=='CY_Tau' ]
+	  then
+		vis=$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad'
+	  else
+		vis=$target'_track4.'$rx'.'$sideband'.cal.miriad,'$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad'
+	  fi
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.dirty'
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.beam'
@@ -43,23 +49,23 @@ do
 	  
 
           # deconvolve image
-	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.model'
-	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.model.fits'
-	  clean map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' out=$target'.'$tracks'.'$rx'.'$sideband'.model' cutoff=0.001 niters=10
-	  fits in=$target'.'$tracks'.'$rx'.'$sideband'.model' op=xyout out=$target'.'$tracks'.'$rx'.'$sideband'.model.fits'
+	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.10.model'
+	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.10.model.fits'
+	  clean map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' out=$target'.'$tracks'.'$rx'.'$sideband'.10.model' cutoff=0.001 niters=10
+	  fits in=$target'.'$tracks'.'$rx'.'$sideband'.10.model' op=xyout out=$target'.'$tracks'.'$rx'.'$sideband'.10.model.fits'
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.clean'
           rm -rf $target'.'$tracks'.'$rx'.'$sideband'.clean.fits'
-          restor map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' model=$target'.'$tracks'.'$rx'.'$sideband'.model' mode=clean out=$target'.'$tracks'.'$rx'.'$sideband'.clean'
+          restor map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' model=$target'.'$tracks'.'$rx'.'$sideband'.10.model' mode=clean out=$target'.'$tracks'.'$rx'.'$sideband'.clean'
           fits in=$target'.'$tracks'.'$rx'.'$sideband'.clean' op=xyout out=$target'.'$tracks'.'$rx'.'$sideband'.clean.fits'
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.residual'
           rm -rf $target'.'$tracks'.'$rx'.'$sideband'.residual.fits'
-          restor map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' model=$target'.'$tracks'.'$rx'.'$sideband'.model' mode=residual out=$target'.'$tracks'.'$rx'.'$sideband'.residual'
+          restor map=$target'.'$tracks'.'$rx'.'$sideband'.dirty' beam=$target'.'$tracks'.'$rx'.'$sideband'.beam' model=$target'.'$tracks'.'$rx'.'$sideband'.10.model' mode=residual out=$target'.'$tracks'.'$rx'.'$sideband'.residual'
           fits in=$target'.'$tracks'.'$rx'.'$sideband'.residual' op=xyout out=$target'.'$tracks'.'$rx'.'$sideband'.residual.fits'
 	  
 	  
-	  output=$(python get_rms_com.py  $rx  $sideband  $target $tracks)
+	  output=$(python get_rms.py  $rx  $sideband  $target $tracks)
 	  IFS='   ' read -r -a array <<< "$output"
 	  rms=${array[0]}
 	  cut=$(bc -l <<< "${array[0]}*1.5")
@@ -88,7 +94,7 @@ do
 	  linmos in=$target'.'$tracks'.'$rx'.'$sideband'.clean' out=$target'.'$tracks'.'$rx'.'$sideband'.clean.pbcor'
 	  fits in=$target'.'$tracks'.'$rx'.'$sideband'.clean.pbcor' op=xyout out=$target'.'$tracks'.'$rx'.'$sideband'.clean.pbcor.fits'
 
-          output=$(python flux_measure_com.py  $rx  $sideband  $target $tracks $box $rms)
+          output=$(python flux_measure.py  $rx  $sideband  $target $tracks $box $rms)
           IFS='   ' read -r -a array <<< "$output"
 	  echo "The peak flux of clean map is ${array[0]} mJy/beam"
           echo "The fitted 2D Gaussian component has major and minor FWHM ${array[1]} arcsec and ${array[2]} arcsec"
