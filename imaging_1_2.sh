@@ -62,7 +62,8 @@ do
           rm -rf $target'.'$track'.'$rx'.'$sideband'.10.model.fits'
           clean map=$target'.'$track'.'$rx'.'$sideband'.dirty' \
                   beam=$target'.'$track'.'$rx'.'$sideband'.beam' \
-                  out=$target'.'$track'.'$rx'.'$sideband'.10.model' cutoff=0.01 niters=10
+                  out=$target'.'$track'.'$rx'.'$sideband'.10.model' cutoff=0.01 niters=10 \
+	  	  options=positive
           fits in=$target'.'$track'.'$rx'.'$sideband'.10.model' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.10.model.fits'
 
           rm -rf $target'.'$track'.'$rx'.'$sideband'.clean'
@@ -106,7 +107,7 @@ do
           clean map=$target'.'$track'.'$rx'.'$sideband'.dirty' \
                   beam=$target'.'$track'.'$rx'.'$sideband'.beam' \
                   out=$target'.'$track'.'$rx'.'$sideband'.model' cutoff=$cut niters=1000 \
-                  region='boxes('${array[1]}','${array[2]}','${array[3]}','${array[4]}')'
+                  region='boxes('${array[1]}','${array[2]}','${array[3]}','${array[4]}')' 
           fits in=$target'.'$track'.'$rx'.'$sideband'.model' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.model.fits'
 
           # restore image
