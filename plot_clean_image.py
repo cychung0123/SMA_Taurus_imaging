@@ -12,19 +12,21 @@ from astropy.visualization.wcsaxes import SphericalCircle
 
 targets = ['FM_Tau', 'CW_Tau', '04113+2758', 'CY_Tau', 'DD_Tau', 'V892_Tau', 'BP_Tau', 'CoKu_Tau_1', 'RY_Tau', 'DE_Tau', 'IP_Tau', 'FT_Tau', 'FV_Tau', 'DH_Tau', 'IQ_Tau', 'DK_Tau', 'UZ_Tau', 'DL_Tau', 'GK_Tau', 'AA_Tau', 'LkCa_15', 'CI_Tau', '04278+2253', 'T_Tau', 'UX_Tau', 'V710_Tau', 'DM_Tau', 'DQ_Tau', 'Haro_6-37', 'DR_Tau', 'FY_Tau', 'HO_Tau', 'DN_Tau', 'DO_Tau', 'HV_Tau', 'IC_2087_IR', 'GO_Tau', 'CIDA-7', 'DS_Tau', 'UY_Aur', 'Haro_6-39', 'GM_Aur', 'AB_Aur', 'SU_Aur', 'RW_Aur', 'CIDA-9', 'V836_Tau']
 
+targets = ['04113+2758','CY_Tau','V892_Tau','RY_Tau','FT_Tau','UZ_Tau','DL_Tau','LkCa_15','CI_Tau','T_Tau','DR_Tau','DO_Tau','IC_2087_IR','GM_Aur','AB_Aur','Haro_6-37','DM_Tau','AA_Tau']
+
 
 tracks = ['track4', 'track5', 'track6']
-rxs = ['rx345', 'rx400']
+rxs = ['rx240', 'rx345']
 sidebands = ['lsb', 'usb']
 
-track = 'track4'
+track = 'track3'
 
 for rx in rxs:
   for sideband in sidebands:
 
     boxes = []
     target = []
-    filename='box_'+track+'.txt'
+    filename='box_'+track+'.sel.txt'
 
     file = open(filename, 'r')
     lines = file.readlines()
@@ -34,9 +36,9 @@ for rx in rxs:
         boxes.append(eval(lines[i].split()[k+1]+lines[i].split()[k+2]+lines[i].split()[k+3]+lines[i].split()[k+4]))
 
 
-    fig = plt.figure(figsize=(20, 15))
+    fig = plt.figure(figsize=(20, 12))
     for i in range(len(targets)):
-        filename=targets[i]+'.'+track+'.'+rx+'.'+sideband+'.clean.fits'
+        filename=targets[i]+'.'+track+'.'+rx+'.'+sideband+'.sel.clean.fits'
         if_success = False
         try:
             hdul = fits.open(filename)
@@ -69,7 +71,7 @@ for rx in rxs:
             except:
                 print( 'Warning. No coordinate headers' )
 
-            ax = plt.subplot2grid((6, 8),(math.floor(i/8), i%8), projection=wcs)
+            ax = plt.subplot2grid((3, 6),(math.floor(i/6), i%6), projection=wcs)
             ax.set_xlabel(' ', fontsize='small')
             ax.set_ylabel(' ', fontsize='small')
             ax.tick_params(axis='x', which='both', labelbottom=False) 
