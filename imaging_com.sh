@@ -32,12 +32,16 @@ do
 		uvflag vis=$target'_'$track'.'$rx'.'$sideband'.cal.miriad' edge=64,64,0 flagval=$flagval
 	  done
 	  
-	  if [ $target=='CY_Tau' ]
-	  then
-		vis=$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad'
-	  else
-		vis=$target'_track4.'$rx'.'$sideband'.cal.miriad,'$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad'
-	  fi
+	  uvaver vis=$target'_track4.'$rx'.'$sideband'.cal.miriad,'$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out=$target'_track456.'$rx'.'$sideband'.cal.miriad'
+	  
+	  if [ $target = 'CY_Tau' ]
+          then
+                rm -rf $target'_track456.'$rx'.'$sideband'.cal.miriad'
+                uvaver vis=$target'_track5.'$rx'.'$sideband'.cal.miriad,'$target'_track6.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out=$target'_track456.'$rx'.'$sideband'.cal.miriad'
+          fi
+
+          vis=$target'_track456.'$rx'.'$sideband'.cal.miriad'
+
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.dirty'
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.beam'

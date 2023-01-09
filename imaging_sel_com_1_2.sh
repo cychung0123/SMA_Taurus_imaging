@@ -31,12 +31,21 @@ do
 		uvflag vis=$target'_'$track'.'$rx'.'$sideband'.cal.miriad.sel' edge=64,64,0 flagval=$flagval
 	  done
 	  
-          if [ $target=='V892_Tau' ]
+#          if [ $target=='V892_Tau' ]
+#          then
+#		uvaver vis=$target'_track1.'$rx'.'$sideband'.cal.miriad.sel' options=nocal,nopass,nopol out=$target'_track12.'$rx'.'$sideband'.cal.miriad.sel'
+#          else
+	  uvaver vis=$target'_track1.'$rx'.'$sideband'.cal.miriad.sel,'$target'_track2.'$rx'.'$sideband'.cal.miriad.sel' options=nocal,nopass,nopol out=$target'_track12.'$rx'.'$sideband'.cal.miriad.sel'
+#          fi
+
+	  if [ $target = 'V892_Tau' ]
           then
-                vis=$target'_track1.'$rx'.'$sideband'.cal.miriad.sel'
-          else
-                vis=$target'_track1.'$rx'.'$sideband'.cal.miriad.sel,'$target'_track2.'$rx'.'$sideband'.cal.miriad.sel'
-          fi
+		rm -rf $target'_track12.'$rx'.'$sideband'.cal.miriad.sel'
+		uvaver vis=$target'_track1.'$rx'.'$sideband'.cal.miriad.sel' options=nocal,nopass,nopol out=$target'_track12.'$rx'.'$sideband'.cal.miriad.sel'
+	  fi
+
+		
+	  vis=$target'_track12.'$rx'.'$sideband'.cal.miriad.sel'
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.sel.dirty'
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.sel.beam'
@@ -108,6 +117,7 @@ do
 	  mv *.residual ./ch0/$tracks/
 	  mv *.fits ./ch0/$tracks/
 	  cp *.txt ./ch0/$tracks/
+	  mv $vis ./ch0/$tracks/
 	  rm -rf *.miriad.sel
 
         done

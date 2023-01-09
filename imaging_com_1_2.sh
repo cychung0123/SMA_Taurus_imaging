@@ -31,12 +31,17 @@ do
 		uvflag vis=$target'_'$track'.'$rx'.'$sideband'.cal.miriad' edge=64,64,0 flagval=$flagval
 	  done
 	  
-	  if [ $target=='V892_Tau' ]
-	  then
-		vis=$target'_track1.'$rx'.'$sideband'.cal.miriad'
-	  else
-		vis=$target'_track1.'$rx'.'$sideband'.cal.miriad,'$target'_track2.'$rx'.'$sideband'.cal.miriad'
-	  fi
+          uvaver vis=$target'_track1.'$rx'.'$sideband'.cal.miriad,'$target'_track2.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out=$target'_track12.'$rx'.'$sideband'.cal.miriad'
+#          fi
+
+          if [ $target = 'V892_Tau' ]
+          then
+                rm -rf $target'_track12.'$rx'.'$sideband'.cal.miriad'
+                uvaver vis=$target'_track1.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out=$target'_track12.'$rx'.'$sideband'.cal.miriad'
+          fi
+
+
+          vis=$target'_track12.'$rx'.'$sideband'.cal.miriad'
 
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.dirty'
 	  rm -rf $target'.'$tracks'.'$rx'.'$sideband'.beam'
