@@ -50,18 +50,19 @@ for track in tracks:
                 ax = fig.add_subplot(420+int(ant))
                 colors = cm.turbo(np.linspace(0, 1, len(targets)))
 
+                plot_sol(ant, track, rx, sideband, 'com_vis', 'black', 1)
+                
                 for target,color in zip(targets,colors):
                     plot_sol(ant, track, rx, sideband, target, color, 0)
                     l.append(target)
                 
-                plot_sol(ant, track, rx, sideband, 'com_vis', 'black', 1)
-                
+
                 if (ant%2 == 1):
                     plt.ylabel('Phase (deg)', size=10)
                 if (ant==7 or ant==8):
                     plt.xlabel('UTC time', size=10)
                 if (ant==6):
-                    plt.legend(l, loc=2, prop={'size': 8}, ncol=3)
+                    plt.legend(l, loc=2, prop={'size': 8}, ncol=4)
                
                 for target in others:
                     try:
@@ -73,7 +74,7 @@ for track in tracks:
                 ax.set_ylim([-180,180])
                 
             fig.tight_layout()
-            plt.savefig('selfcal_solution_0510+180_'+track+'.'+rx+'.'+sideband+'.pdf', format='PDF', transparent=True)
+            plt.savefig('selfcal_solution_'+track+'.'+rx+'.'+sideband+'.pdf', format='PDF', transparent=True)
             plt.close(fig)
 
 
