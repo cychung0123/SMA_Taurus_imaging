@@ -35,8 +35,8 @@ def plot_sol(ant, track, rx, sideband, target, color, zord):
 
 
 targets=['UZ_Tau','DL_Tau','LkCa_15','CI_Tau','T_Tau','DR_Tau','DO_Tau','IC_2087_IR','GM_Aur','AB_Aur']
-tracks=['track4','track5','track6']
-rxs=['rx345', 'rx400']
+tracks=['track2']
+rxs=['rx230', 'rx240']
 sidebands=['lsb', 'usb']
 others=['DH_Tau', 'IQ_Tau', 'DK_Tau', 'FY_Tau', 'GK_Tau', 'AA_Tau', 'CI_Tau', '04278+2253', 'UX_Tau', 'V710_Tau', 'DM_Tau', 'DQ_Tau', 'Haro_6-37', 'HO_Tau', 'DN_Tau', 'HV_Tau', 'CIDA-7', 'GO_Tau', 'CIDA-7', 'DS_Tau', 'UY_Aur', 'Haro_6-39', 'SU_Aur', 'RW_Aur', 'CIDA-9', 'V836_Tau']
 

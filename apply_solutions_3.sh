@@ -1,6 +1,6 @@
 targets='AA_Tau DH_Tau IQ_Tau DK_Tau FY_Tau GK_Tau CI_Tau 04278+2253 UX_Tau V710_Tau DQ_Tau HO_Tau DN_Tau HV_Tau CIDA-7 GO_Tau DS_Tau UY_Aur Haro_6-39 SU_Aur RW_Aur CIDA-9 V836_Tau'
-tracks='track4 track5 track6'
-rxs='rx345 rx400'
+tracks='track3'
+rxs='rx240 rx345'
 sidebands='lsb usb'
 refant='6'
 vislist="'"
@@ -12,8 +12,6 @@ vislist=${vislist::-1}
 vislist+="'"
 echo $vislist
 
-rm -rf *_track*
-cp ../../imaging_box/center_track456.txt .
 
 for track in $tracks
 do
@@ -44,17 +42,17 @@ do
     do
 
        # set reference antenna and solution interval
-      if [ $track = 'track4' ]
+      if [ $track = 'track3' ]
       then
-        interval='5'
+        interval='9'
         refant='6'
         cellsize=0.25
         imsize=256
       fi
 
-      if [ $track = 'track5' ]
+      if [ $track = 'track2' ]
       then
-        interval='5'
+        interval='9'
         refant='6'
         cellsize=0.25
         imsize=256
@@ -76,7 +74,8 @@ do
 	vis_b='com_vis_'$track'.'$rx'.'$sideband'.cal.miriad.sel'
 	cp -r ./selcal_Miriad/$vis_b .
 
-	gpcopy vis=$vis_b out=$vis_f mode=apply options=nopol,nopass,relax
+	gpcopy vis=$vis_b mode=apply \
+	       options=nopol,nopass,relax out=$vis_f
 		
 	for target in $targets
         do
@@ -294,6 +293,4 @@ do
     done
 done
 
-mkdir SED_f 
 mv *_track* SED_f
-

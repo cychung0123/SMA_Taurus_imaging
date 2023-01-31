@@ -26,13 +26,16 @@ tracks = ['track1','track2','track3','track4','track5','track6']
 colors = cm.jet([0.2, 0.3, 0.5, 0.7, 0.8, 0.95])
 freq1 = [199, 219, 228, 248]
 freq2 = [260, 280, 292, 312]
-freq3 = [337, 357, 397.5, 417.5]
+freq3 = [337, 357, 399.5, 415.5]
 freq = []
 flux = []
 rms = []
 flux_sel = []
 rms_sel = []
-selcal_target = ['04113+2758','CY_Tau','V892_Tau','RY_Tau','FT_Tau','UZ_Tau','DL_Tau','LkCa_15','CI_Tau','T_Tau','DR_Tau','DO_Tau','IC_2087_IR','GM_Aur','AB_Aur']
+selcal_target = ['CY_Tau','V892_Tau','RY_Tau','FT_Tau','UZ_Tau','LkCa_15','T_Tau','DR_Tau','DO_Tau','IC_2087_IR']
+others=['FM_Tau', 'CW_Tau', 'DD_Tau', 'CoKu_Tau_1', 'BP_Tau', 'DE_Tau', 'IP_Tau', 'FV_Tau','DH_Tau', 'IQ_Tau', 'DK_Tau', 'FY_Tau', 'GK_Tau', 'AA_Tau', '04278+2253', 'UX_Tau', 'V710_Tau', 'DM_Tau', 'DQ_Tau', 'Haro_6-37', 'HO_Tau', 'DN_Tau', 'HV_Tau', 'CIDA-7', 'GO_Tau', 'DS_Tau', 'UY_Aur', 'Haro_6-39', 'SU_Aur', 'RW_Aur', 'CIDA-9', 'V836_Tau']
+
+selcal_target=others
 
 target = []
 spidx = []
@@ -164,7 +167,7 @@ for i in range(num_figure):
             flux_max = max(flux_max, max(flux_sel[k][idx]))
 
         plt.ylim([0, flux_max*1.25])
-        plt.legend(tracks)
+        plt.legend(['1126 230 GHz-1','1018 230 GHz-2','1121 270 GHz-3','0925 400 GHz-4','0903 400 GHz-5','1122 400 GHz-6','A&W(2005)','A&W(2005)'],ncol=2,loc=2)
         if (j==2):
             plt.xlabel('Frequency [GHz]', size=14)
         if (if_zero>0):
@@ -181,7 +184,7 @@ for i in range(num_figure):
             if_zero+=flux[k][idx].tolist().count(0.0)
 
         plt.ylim([0, flux_max*1.25])
-        plt.legend(tracks)
+        plt.legend(['1126 230 GHz-1','1018 230 GHz-2','1121 270 GHz-3','0925 400 GHz-4','0903 400 GHz-5','1122 400 GHz-6','A&W(2005)','A&W(2005)'],ncol=2,loc=2)
         plt.ylabel('Flux density [mJy]', size=14)
         if (j==2):
             plt.xlabel('Frequency [GHz]', size=14) 
@@ -189,7 +192,7 @@ for i in range(num_figure):
             ax.title.set_text(target[idx])
         else:
             alpha = SED_fit(freq, flux, idx)
-            ax.title.set_text(target[idx]+', \u03B1='+str(alpha))
+            ax.title.set_text(target[idx]+', \u03B1='+str(alpha)+', ['+str(spidx[idx])+']')
 
     fig.tight_layout()
     plt.savefig('flux_measurement_'+str(i)+'.sel.pdf', format='PDF', transparent=True)
@@ -219,7 +222,7 @@ for j in range(len(target)%num):
             flux_max = max(flux_max, max(flux_sel[k][idx]))
 
         plt.ylim([0, flux_max*1.25])
-        plt.legend(tracks)
+        plt.legend(['1126 230 GHz-1','1018 230 GHz-2','1121 270 GHz-3','0925 400 GHz-4','0903 400 GHz-5','1122 400 GHz-6','A&W(2005)','A&W(2005)'],ncol=2,loc=2)
         if (j==2):
             plt.xlabel('Frequency [GHz]', size=14)
         if (if_zero>0):
@@ -236,7 +239,7 @@ for j in range(len(target)%num):
             if_zero+=flux[k][idx].tolist().count(0.0)
 
         plt.ylim([0, flux_max*1.25])
-        plt.legend(tracks)
+        plt.legend(['1126 230 GHz-1','1018 230 GHz-2','1121 270 GHz-3','0925 400 GHz-4','0903 400 GHz-5','1122 400 GHz-6','A&W(2005)','A&W(2005)'],ncol=2,loc=2)
         plt.ylabel('Flux density [mJy]', size=14)
         if (j==2):
             plt.xlabel('Frequency [GHz]', size=14)
@@ -244,7 +247,7 @@ for j in range(len(target)%num):
             ax.title.set_text(target[idx])
         else:
             alpha = SED_fit(freq, flux, idx)
-            ax.title.set_text(target[idx]+', \u03B1='+str(alpha))
+            ax.title.set_text(target[idx]+', \u03B1='+str(alpha)+', ['+str(spidx[idx])+']')
 
 fig.tight_layout()
 plt.savefig('flux_measurement_'+str(i)+'.sel.pdf', format='PDF', transparent=True)
