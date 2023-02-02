@@ -14,7 +14,7 @@ refant='6'
 #rm -rf *.sel
 #rm -rf *.gain
 #rm -rf *rx*
-#cp ../../imaging_box/center_track456.txt .
+cp ../../imaging_box/center_track456.txt .
 
 # generate visibility list and model list
 vislist="'"
@@ -81,7 +81,7 @@ do
        # set reference antenna and solution interval
       if [ $track = 'track3' ]
       then
-        interval='9'
+        interval='5'
         refant='6'
 	cellsize=0.25
 	imsize=256
@@ -89,7 +89,7 @@ do
 
       if [ $track = 'track2' ]
       then
-        interval='9'
+        interval='5'
         refant='6'
 	cellsize=0.25
 	imsize=256
@@ -97,7 +97,7 @@ do
 
       if [ $track = 'track6' ]
       then
-        interval='7.5'
+        interval='5'
         refant='6'
 	cellsize=0.125
 	imsize=512
@@ -363,3 +363,4 @@ do
     done
 done
 
+mv *_track* SED_b

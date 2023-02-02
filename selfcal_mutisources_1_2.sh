@@ -1,4 +1,4 @@
-targets='UZ_Tau DL_Tau LkCa_15 CI_Tau T_Tau DR_Tau DO_Tau IC_2087_IR GM_Aur AB_Aur DM_Tau DN_Tau Haro_6-37'
+targets='UZ_Tau DL_Tau LkCa_15 CI_Tau T_Tau DR_Tau DO_Tau IC_2087_IR GM_Aur AB_Aur Haro_6-37'
 tracks='track1 track2'
 rxs='rx230 rx240'
 sidebands='lsb usb'
@@ -14,7 +14,7 @@ refant='6'
 #rm -rf *.sel
 #rm -rf *.gain
 #rm -rf *rx*
-#cp ../../imaging_box/center_track456.txt .
+cp ../../imaging_box/center_track456.txt .
 
 # generate visibility list and model list
 vislist="'"
@@ -65,7 +65,7 @@ do
 	    	cp -r $datadir$vis ./
 	    	uvflag vis=$vis edge=64,64,0 flagval="f"
 	    done
-	    uvaver vis='UZ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DL_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,LkCa_15_'$track'.'$rx'.'$sideband'.cal.miriad,CI_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,T_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DR_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,IC_2087_IR_'$track'.'$rx'.'$sideband'.cal.miriad,GM_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,AB_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,DM_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DN_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,Haro_6-37_'$track'.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out='com_vis_'$track'.'$rx'.'$sideband'.cal.miriad'
+	    uvaver vis='UZ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DL_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,LkCa_15_'$track'.'$rx'.'$sideband'.cal.miriad,CI_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,T_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DR_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,IC_2087_IR_'$track'.'$rx'.'$sideband'.cal.miriad,GM_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,AB_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,Haro_6-37_'$track'.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out='com_vis_'$track'.'$rx'.'$sideband'.cal.miriad'
 	    
 	 done
     done
@@ -81,7 +81,7 @@ do
        # set reference antenna and solution interval
       if [ $track = 'track1' ]
       then
-        interval='9'
+        interval='5'
         refant='6'
 	cellsize=0.25
 	imsize=256
@@ -89,7 +89,7 @@ do
 
       if [ $track = 'track2' ]
       then
-        interval='9'
+        interval='5'
         refant='6'
 	cellsize=0.25
 	imsize=256
@@ -97,7 +97,7 @@ do
 
       if [ $track = 'track6' ]
       then
-        interval='7.5'
+        interval='5'
         refant='6'
 	cellsize=0.125
 	imsize=512
@@ -110,9 +110,9 @@ do
 
 	if [ $sideband = 'lsb' ]
 	then
-		model='UZ_Tau.'$track'.'$rx'.lsb.model,DL_Tau.'$track'.'$rx'.lsb.model,LkCa_15.'$track'.'$rx'.lsb.model,CI_Tau.'$track'.'$rx'.lsb.model,T_Tau.'$track'.'$rx'.lsb.model,DR_Tau.'$track'.'$rx'.lsb.model,DO_Tau.'$track'.'$rx'.lsb.model,IC_2087_IR.'$track'.'$rx'.lsb.model,GM_Aur.'$track'.'$rx'.lsb.model,AB_Aur.'$track'.'$rx'.lsb.model,DM_Tau.'$track'.'$rx'.lsb.model,DN_Tau.'$track'.'$rx'.lsb.model,Haro_6-37.'$track'.'$rx'.lsb.model'
+		model='UZ_Tau.'$track'.'$rx'.lsb.model,DL_Tau.'$track'.'$rx'.lsb.model,LkCa_15.'$track'.'$rx'.lsb.model,CI_Tau.'$track'.'$rx'.lsb.model,T_Tau.'$track'.'$rx'.lsb.model,DR_Tau.'$track'.'$rx'.lsb.model,DO_Tau.'$track'.'$rx'.lsb.model,IC_2087_IR.'$track'.'$rx'.lsb.model,GM_Aur.'$track'.'$rx'.lsb.model,AB_Aur.'$track'.'$rx'.lsb.model,Haro_6-37.'$track'.'$rx'.lsb.model'
 	else
-		model='UZ_Tau.'$track'.'$rx'.lsb.10.sel.model,DL_Tau.'$track'.'$rx'.lsb.10.sel.model,LkCa_15.'$track'.'$rx'.lsb.10.sel.model,CI_Tau.'$track'.'$rx'.lsb.10.sel.model,T_Tau.'$track'.'$rx'.lsb.10.sel.model,DR_Tau.'$track'.'$rx'.lsb.10.sel.model,DO_Tau.'$track'.'$rx'.lsb.10.sel.model,IC_2087_IR.'$track'.'$rx'.lsb.10.sel.model,GM_Aur.'$track'.'$rx'.lsb.10.sel.model,AB_Aur.'$track'.'$rx'.lsb.10.sel.model,DM_Tau.'$track'.'$rx'.lsb.10.sel.model,DN_Tau.'$track'.'$rx'.lsb.10.sel.model,Haro_6-37.'$track'.'$rx'.lsb.10.sel.model'
+		model='UZ_Tau.'$track'.'$rx'.lsb.10.sel.model,DL_Tau.'$track'.'$rx'.lsb.10.sel.model,LkCa_15.'$track'.'$rx'.lsb.10.sel.model,CI_Tau.'$track'.'$rx'.lsb.10.sel.model,T_Tau.'$track'.'$rx'.lsb.10.sel.model,DR_Tau.'$track'.'$rx'.lsb.10.sel.model,DO_Tau.'$track'.'$rx'.lsb.10.sel.model,IC_2087_IR.'$track'.'$rx'.lsb.10.sel.model,GM_Aur.'$track'.'$rx'.lsb.10.sel.model,AB_Aur.'$track'.'$rx'.lsb.10.sel.model,Haro_6-37.'$track'.'$rx'.lsb.10.sel.model'
 	fi
 
         # convert to Stokes I data
@@ -363,3 +363,4 @@ do
     done
 done
 
+mv *_track* SED_b

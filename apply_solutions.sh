@@ -1,4 +1,4 @@
-targets='AA_Tau DH_Tau IQ_Tau DK_Tau FY_Tau GK_Tau CI_Tau 04278+2253 UX_Tau V710_Tau DQ_Tau HO_Tau DN_Tau HV_Tau CIDA-7 GO_Tau DS_Tau UY_Aur Haro_6-39 SU_Aur RW_Aur CIDA-9 V836_Tau'
+targets='AA_Tau DM_Tau DN_Tau DH_Tau IQ_Tau DK_Tau FY_Tau GK_Tau CI_Tau 04278+2253 UX_Tau V710_Tau DQ_Tau HO_Tau HV_Tau CIDA-7 GO_Tau DS_Tau UY_Aur Haro_6-39 SU_Aur RW_Aur CIDA-9 V836_Tau'
 tracks='track4 track5 track6'
 rxs='rx345 rx400'
 sidebands='lsb usb'
@@ -12,7 +12,6 @@ vislist=${vislist::-1}
 vislist+="'"
 echo $vislist
 
-rm -rf *_track*
 cp ../../imaging_box/center_track456.txt .
 
 for track in $tracks
@@ -23,15 +22,15 @@ do
     do
          for sideband in $sidebands
          do
+	    rm -rf 'com_vis_faint_'$track'.'$rx'.'$sideband'.cal.miriad'
+
             for target in $targets
             do
                 vis=$target'_'$track'.'$rx'.'$sideband'.cal.miriad'
                 cp -r $datadir$vis ./
                 uvflag vis=$vis edge=64,64,0 flagval="f"
             done
-
-	    rm -rf 'com_vis_faint_'$track'.'$rx'.'$sideband'.cal.miriad'
-	    uvaver vis='AA_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DH_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,IQ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DK_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,FY_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,GK_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,CI_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,04278+2253_'$track'.'$rx'.'$sideband'.cal.miriad,UX_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,V710_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DQ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,HO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DN_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,HV_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,CIDA-7_'$track'.'$rx'.'$sideband'.cal.miriad,GO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DS_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,UY_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,Haro_6-39_'$track'.'$rx'.'$sideband'.cal.miriad,SU_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,RW_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,CIDA-9_'$track'.'$rx'.'$sideband'.cal.miriad,V836_Tau_'$track'.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out='com_vis_faint_'$track'.'$rx'.'$sideband'.cal.miriad'
+	    uvaver vis='AA_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DM_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DN_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DH_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,IQ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DK_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,FY_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,GK_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,CI_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,04278+2253_'$track'.'$rx'.'$sideband'.cal.miriad,UX_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,V710_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DQ_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,HO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DN_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,HV_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,CIDA-7_'$track'.'$rx'.'$sideband'.cal.miriad,GO_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,DS_Tau_'$track'.'$rx'.'$sideband'.cal.miriad,UY_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,Haro_6-39_'$track'.'$rx'.'$sideband'.cal.miriad,SU_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,RW_Aur_'$track'.'$rx'.'$sideband'.cal.miriad,CIDA-9_'$track'.'$rx'.'$sideband'.cal.miriad,V836_Tau_'$track'.'$rx'.'$sideband'.cal.miriad' options=nocal,nopass,nopol out='com_vis_faint_'$track'.'$rx'.'$sideband'.cal.miriad'
 
          done
     done
@@ -98,7 +97,8 @@ do
             rm -rf $target'.'$track'.'$rx'.'$sideband'.10.model.fits'
             clean map=$target'.'$track'.'$rx'.'$sideband'.dirty' \
                 beam=$target'.'$track'.'$rx'.'$sideband'.beam' \
-                out=$target'.'$track'.'$rx'.'$sideband'.10.model' cutoff=0.01 niters=10
+                out=$target'.'$track'.'$rx'.'$sideband'.10.model' cutoff=0.01 niters=10\
+		options=positive
             fits in=$target'.'$track'.'$rx'.'$sideband'.10.model' op=xyout out=$target'.'$track'.'$rx'.'$sideband'.10.model.fits'
 
     	    rm -rf $target'.'$track'.'$rx'.'$sideband'.clean'
@@ -288,11 +288,11 @@ do
             echo "The integrated flux density is ${array[3]} mJy"
 
         done
-        # collecting self-calibrated visibilities into a folder
       done
-        mv $vis_f ./selcal_Miriad
     done
 done
+
+mv com_vis_faint* selcal_Miriad
 
 mkdir SED_f 
 mv *_track* SED_f
